@@ -2,11 +2,11 @@ import torch.nn as nn
 import torch
 
 class MnistModel(nn.Module):
-	def __init__(self): 
+	def __init__(self):
 		super().__init__()
 
 
-		self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3)
+		self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3)
 		self.relu1 = nn.ReLU()
 		self.pool1 = nn.MaxPool2d(kernel_size=2)
 
