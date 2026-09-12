@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import os
 from mnist.model.mnist_model import MnistModel
 from torch.utils.data import DataLoader
 from mnist.dataset.mnist_dataset import MNISTDataset
@@ -17,7 +18,7 @@ class Trainer:
         self.lr = 1e-3
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr = self.lr)
         self.batch_size = 32
-
+        self.output_dir = "checkpoints"
         self.build_dataloaders()
         self.loginfo()
 
@@ -30,6 +31,10 @@ class Trainer:
         print(f"lenght test dataset : {self.test_dataset.__len__()}")
         print(f"lenght training loader : {len(self.training_loader)}")
         print(f"lenght test loader : {len(self.test_loader)}")
+
+    def save_model(self, epoch):
+        save_path = os.path.join(self.output_dir, f"model_epoch_{epoch+1}.pth")
+        torch.save(self.model.state_dict(), save_path)
 
     def build_dataloaders(self):
         self.training_dataset = MNISTDataset(train=True)
@@ -45,6 +50,8 @@ class Trainer:
             print(f"training loss = {training_loss}")
             print(f"validation loss = {validation_loss}")
             print(f"accuracy = {accuracy*100}")
+            self.save_model(epoch)
+        
 
 
     def train_one_epoch(self, epoch):
